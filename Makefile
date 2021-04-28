@@ -58,8 +58,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/usart.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
-./My_Drivers/at_device.c \
-./My_Drivers/at_usart.c \
+./at_device/at_device.c \
+./at_device/at_usart.c \
 ./My_LiteOS_App/app.c
 
 # ASM sources
@@ -123,7 +123,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
 -I./OS_CONFIG \
--I./My_Drivers \
+-I./at_device \
 -I./My_LiteOS_App
 
 
