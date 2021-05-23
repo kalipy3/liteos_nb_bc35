@@ -9,6 +9,7 @@
 #include "los_task.h"
 #include "los_memory.h"
 #include "los_mux.h"
+#include "los_sem.h"
 #include "los_base.h"
 #include "los_swtmr.h"
 #include "los_hwi.h"

@@ -6,7 +6,7 @@
  */
 
 #include "at_device.h"
-#include "at_usart.h"
+#include "bc35.h"
 
 void at_device_init(void){
     at_usart_init();

@@ -7,5 +7,6 @@
 
 #include "at_frame.h"
 
+at_frame_args_s at_frame;
 
 

@@ -6,9 +6,6 @@
  */
 
 #include "at_receiver.h"
-#include "at_device.h"
-#include "liteos.h"
-#include "at_usart.h"
 
 extern at_cmd_args_s at_cmd_args;
 extern uint32_t at_usart_msg_queue_id;
@@ -31,9 +28,13 @@ static void at_usart_msg_listen(void) {
             continue;
         }
 
-        at_usart_get_msg_data((char *)at_usart_rcv_data_buf, msg);//get到的msg_data保存到at_usart_rcv_data_buf
+        int len = at_usart_get_msg_data((char *)at_usart_rcv_data_buf, msg);//get到的msg_data保存到at_usart_rcv_data_buf
         printf("从串口接收到一帧数据:%s\n", (char *)at_usart_rcv_data_buf);
-        at_usart_msg_dispater((char *)at_usart_rcv_data_buf, strlen((char *)at_usart_rcv_data_buf));
+        at_usart_msg_dispater((char *)at_usart_rcv_data_buf, len);
+
+        //释放
+        LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+
     }
 }
 
@@ -43,17 +44,22 @@ static void at_usart_msg_dispater(char *buf, int len) {
 }
 
 static void at_cmd_resp_match(char *buf, int len) {
-    if(strstr((char *)buf,at_cmd_args.resp_strs_expected)) {
-        at_cmd_args.resp_buf = buf;
-        at_cmd_args.resp_len = len;
+    char *str;
+    if (NULL == at_frame.pat_cmd_args) return;
+    for (int i = 0; i < at_frame.pat_cmd_args->resp_strs_expected_num; i++)
+    {
+        str = strstr(at_usart_rcv_data_buf, at_frame.pat_cmd_args->resp_strs_expected[i]);
+        if (NULL != str)
+        {
+            at_frame.pat_cmd_args->match_idx = i;
+            at_frame.pat_cmd_args->resp_buf = str;
+            at_frame.pat_cmd_args->resp_msg_len = len;
+            LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+        }
     }
 }
 
 static void svr_dn_msg_match(char *buf, int len) {
-    if(strstr((char *)buf,at_cmd_args.resp_strs_expected)) {
-        at_cmd_args.resp_buf = buf;
-        at_cmd_args.resp_len = len;
-    }
 }
 
 uint32_t create_at_receiver_task(void)

@@ -6,7 +6,6 @@
  */
 
 #include "at_usart.h"
-#include "liteos.h"
 
 static char at_usart_rcv_buf[RX_BUFFER_LEN];
 
@@ -67,7 +66,7 @@ void at_usart_irq_handle(void){
 }
 
 //get到的msg_data保存到msg_buf
-void at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
+int at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
 
     if (msg.si < msg.ei) {//数据只有1段时
         uint32_t len = msg.ei - msg.si + 1;
@@ -77,6 +76,7 @@ void at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
         }
 
         printf("111:%s\n", (char *)msg_buf);
+        return len;
     } else {//数据被分成2段时
         uint32_t len = (RX_BUFFER_LEN - msg.si + 1) + (msg.ei + 1);//总的长度 = 后半部分长度+前半部分长度
 
@@ -90,6 +90,7 @@ void at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
         }
 
         printf("222:%s\n", (char *)msg_buf);
+        return len;
     }
 }
 

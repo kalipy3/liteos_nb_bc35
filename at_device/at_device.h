@@ -7,6 +7,9 @@
 //#include "usart.h"
 //#include "at_usart.h"
 #include "main.h"
+#include "stdint.h"
+#include "liteos.h"
+//#include "at_usart.h"
 
 #ifndef AT_DEVICE_H
 #define AT_DEVICE_H
@@ -26,9 +29,11 @@ typedef struct {
     char * cmd;//构造好的at命令指针
     uint16_t cmd_len;//at命令长度
     const char **resp_strs_expected;//期望响应的特征字符串
+    uint8_t resp_strs_expected_num;
     int match_idx;//匹配到的特征字符串索引
     char *resp_buf;
-    uint16_t resp_len;
+    uint16_t resp_msg_len;
+    uint8_t cmd_type;
 } at_cmd_args_s;
 
 void at_device_init(void);

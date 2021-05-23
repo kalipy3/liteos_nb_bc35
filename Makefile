@@ -60,7 +60,11 @@ Core/Src/usart.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 ./at_device/at_device.c \
 ./at_device/at_usart.c \
-./My_LiteOS_App/app.c
+./at_device/bc35.c \
+./My_LiteOS_App/app.c \
+./at_frame/at_frame.c \
+./at_frame/at_receiver.c \
+./at_frame/at_transmitter.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -124,6 +128,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -I./OS_CONFIG \
 -I./at_device \
+-I./at_frame \
 -I./My_LiteOS_App
 
 
