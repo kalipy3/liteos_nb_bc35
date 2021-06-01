@@ -64,7 +64,9 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 ./My_LiteOS_App/app.c \
 ./at_frame/at_frame.c \
 ./at_frame/at_receiver.c \
-./at_frame/at_transmitter.c
+./at_frame/at_transmitter.c \
+./My_Drivers/drv_usart_debug.c \
+./My_LiteOS_App/usart_debug.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -129,7 +131,8 @@ C_INCLUDES =  \
 -I./OS_CONFIG \
 -I./at_device \
 -I./at_frame \
--I./My_LiteOS_App
+-I./My_LiteOS_App \
+-I./My_Drivers
 
 
 # compile gcc flags

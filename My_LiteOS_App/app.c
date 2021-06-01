@@ -9,6 +9,7 @@
 #include "at_device.h"
 #include "liteos.h"
 #include "at_usart.h"
+#include "usart_debug.h"
 
 extern uint32_t at_usart_msg_queue_id;
 
@@ -35,6 +36,9 @@ void *usart_Receive_Handler_Task(void *arg)
 
 void Create_Task(void)
 {
+    //先启动usart_debug这个进程
+    create_at_usart_debug_receiver_task();
+
     UINT32 uwRet = 0;
     UINT32 uwTask1;
     TSK_INIT_PARAM_S stInitParam1;

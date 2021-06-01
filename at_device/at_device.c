@@ -10,5 +10,5 @@
 
 void at_device_init(void){
     at_usart_init();
+    at_usart_debug_init();
 }
-

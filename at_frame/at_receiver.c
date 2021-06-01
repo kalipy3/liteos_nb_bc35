@@ -39,6 +39,7 @@ static void at_usart_msg_listen(void) {
 }
 
 static void at_usart_msg_dispater(char *buf, int len) {
+    at_usart_debug_msg_handler(buf, len);
     at_cmd_resp_match(buf, len);
     svr_dn_msg_match(buf, len);
 }

@@ -26,5 +26,6 @@ typedef struct {
 extern at_frame_args_s at_frame;
 uint32_t send_cmd(at_cmd_args_s *args);
 
+void at_usart_debug_msg_handler(char *buf, uint16_t len);
 
 #endif /* !AT_FRAME_H */
