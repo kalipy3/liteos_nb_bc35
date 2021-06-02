@@ -29,11 +29,14 @@ static void at_usart_msg_listen(void) {
         }
 
         int len = at_usart_get_msg_data((char *)at_usart_rcv_data_buf, msg);//get到的msg_data保存到at_usart_rcv_data_buf
-        printf("从串口接收到一帧数据:%s\n", (char *)at_usart_rcv_data_buf);
+        printf("get a msg from usart_bc35:%s\n", (char *)at_usart_rcv_data_buf);
         at_usart_msg_dispater((char *)at_usart_rcv_data_buf, len);
 
         //释放
-        LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+        //uwRet = LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+        //if (uwRet != LOS_OK) {
+        //    printf("at_receiver 1.post sem fail!, err_code:0x%x\r\n", uwRet);
+        //}
 
     }
 }
@@ -55,7 +58,10 @@ static void at_cmd_resp_match(char *buf, int len) {
             at_frame.pat_cmd_args->match_idx = i;
             at_frame.pat_cmd_args->resp_buf = str;
             at_frame.pat_cmd_args->resp_msg_len = len;
-            LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+            uint32_t ret = LOS_SemPost(at_frame.at_cmd_resp_sem_id);
+            if (ret != LOS_OK) {
+                printf("at_receiver 1.post sem fail!, err_code:0x%x\r\n", ret);
+            }
         }
     }
 }
@@ -69,7 +75,7 @@ uint32_t create_at_receiver_task(void)
     UINT32 uwTask1;
     TSK_INIT_PARAM_S stInitParam1;
 
-    stInitParam1.usTaskPrio = 9;
+    stInitParam1.usTaskPrio = 4;
     stInitParam1.uwStackSize = 0x400;
     stInitParam1.pcName = "at_usart_msg_listen";
 

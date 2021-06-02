@@ -18,8 +18,8 @@ typedef struct {
     at_cmd_args_s *pat_cmd_args;
 } at_frame_args_s;
 
-//#define AT_CMD_TIMEOUT 10*1000
-#define AT_CMD_TIMEOUT -2 
+#define AT_CMD_TIMEOUT 10*1000
+//#define AT_CMD_TIMEOUT -2 
 #define AT_OK 0
 #define AT_ERROR -1
 
