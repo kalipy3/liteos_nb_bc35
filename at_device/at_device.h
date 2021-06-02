@@ -14,9 +14,9 @@
 #ifndef AT_DEVICE_H
 #define AT_DEVICE_H
 
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart6;
 
-#define USART_HANDLE_FOR_AT_DEVICE    huart3
+#define USART_HANDLE_FOR_AT_DEVICE    huart6
 #define RX_BUFFER_LEN 1024
 #define TX_BUFFER_LEN 256 
 

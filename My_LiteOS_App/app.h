@@ -9,5 +9,6 @@
 #define APP_H
 
 void Create_Task(void);
+void Create_bc35Test_Task(void);
 
 #endif /* !APP_H */

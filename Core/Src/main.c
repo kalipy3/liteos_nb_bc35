@@ -90,6 +90,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART3_UART_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   uwRet = LOS_KernelInit();
     if(uwRet != LOS_OK) {
@@ -99,6 +100,8 @@ int main(void)
     at_device_init();
 
     Create_Task();
+    
+    Create_bc35Test_Task();
     
     LOS_Start();
   /* USER CODE END 2 */

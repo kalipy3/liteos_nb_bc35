@@ -34,7 +34,7 @@ static void at_usart_debug_msg_listen(void) {
         }
 
         int len = at_usart_debug_get_msg_data((char *)at_usart_debug_rcv_data_buf, msg);//get到的msg_data保存到at_usart_rcv_data_buf
-        printf("从串口接收到一帧数据:%s\n", (char *)at_usart_debug_rcv_data_buf);
+        printf("从串口接收到一帧数据usart_debug:%s\n", (char *)at_usart_debug_rcv_data_buf);
 
         at_usart_debug_msg_handler(at_usart_debug_rcv_data_buf, len);
 
@@ -47,7 +47,7 @@ uint32_t create_at_usart_debug_receiver_task(void)
     UINT32 uwTask1;
     TSK_INIT_PARAM_S stInitParam1;
 
-    stInitParam1.usTaskPrio = 9;
+    stInitParam1.usTaskPrio = 4;
     stInitParam1.uwStackSize = 0x400;
     stInitParam1.pcName = "at_usart_debug_msg_listen";
 

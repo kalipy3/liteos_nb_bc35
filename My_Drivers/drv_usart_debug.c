@@ -75,7 +75,7 @@ int at_usart_debug_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
             msg_buf[i] = at_usart_debug_rcv_buf[msg.si++];
         }
 
-        printf("1:%s\n", (char *)msg_buf);
+        //printf("1:%s\n", (char *)msg_buf);
         return len;
     } else {//数据被分成2段时
         uint32_t len = (USART_DEBUG_RX_BUFFER_LEN - msg.si + 1) + (msg.ei + 1);//总的长度 = 后半部分长度+前半部分长度
@@ -89,7 +89,7 @@ int at_usart_debug_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
             }
         }
 
-        printf("2:%s\n", (char *)msg_buf);
+        //printf("2:%s\n", (char *)msg_buf);
         return len;
     }
 }
@@ -99,24 +99,4 @@ void at_usart_debug_send(char *buf, uint16_t len){
     HAL_UART_Transmit(at_debug_huart, (uint8_t *)buf, len, 0xFFFF);
 }
 
-//方法二
-static char at_usart_debug_tx_buf[USART_DEBUG_TX_BUFFER_LEN];
-void my_usart_debug_printf(char* fmt,...) 
-{  
-    unsigned int i,length;
-
-    va_list ap;
-    va_start(ap,fmt);
-    vsprintf(at_usart_debug_tx_buf,fmt,ap);
-    va_end(ap);	
-    
-    length=strlen((const char*)at_usart_debug_tx_buf);		
-    while((at_debug_huart->Instance->SR&0X40)==0);
-    for(i = 0;i < length;i ++)
-    {			
-        at_debug_huart->Instance->DR = at_usart_debug_tx_buf[i];
-        while((at_debug_huart->Instance->SR&0X40)==0);	
-    }	
-}
-
-//方法三见usart.c
+//方法二见usart.c

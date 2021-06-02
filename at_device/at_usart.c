@@ -75,7 +75,7 @@ int at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
             msg_buf[i] = at_usart_rcv_buf[msg.si++];
         }
 
-        printf("111:%s\n", (char *)msg_buf);
+        //printf("111:%s\n", (char *)msg_buf);
         return len;
     } else {//数据被分成2段时
         uint32_t len = (RX_BUFFER_LEN - msg.si + 1) + (msg.ei + 1);//总的长度 = 后半部分长度+前半部分长度
@@ -89,7 +89,7 @@ int at_usart_get_msg_data(char * msg_buf, at_usart_msg_s msg) {
             }
         }
 
-        printf("222:%s\n", (char *)msg_buf);
+        //printf("222:%s\n", (char *)msg_buf);
         return len;
     }
 }
@@ -99,24 +99,22 @@ void at_usart_send(char *buf, uint16_t len){
     HAL_UART_Transmit(at_huart, (uint8_t *)buf, len, 0xFFFF);
 }
 
-//方法二
-static char at_usart_tx_buf[TX_BUFFER_LEN];
-void my_printf(char* fmt,...) 
-{  
-    unsigned int i,length;
-
-    va_list ap;
-    va_start(ap,fmt);
-    vsprintf(at_usart_tx_buf,fmt,ap);
-    va_end(ap);	
-    
-    length=strlen((const char*)at_usart_tx_buf);		
-    while((at_huart->Instance->SR&0X40)==0);
-    for(i = 0;i < length;i ++)
-    {			
-        at_huart->Instance->DR = at_usart_tx_buf[i];
-        while((at_huart->Instance->SR&0X40)==0);	
-    }	
-}
-
-//方法三见usart.c
+//方法二(慎用，在有的开发板上有用，有的没用)
+//static char at_usart_tx_buf[TX_BUFFER_LEN];
+//void u6_printf(char* fmt,...) 
+//{  
+//    unsigned int i,length;
+//
+//    va_list ap;
+//    va_start(ap,fmt);
+//    vsprintf(at_usart_tx_buf,fmt,ap);
+//    va_end(ap);	
+//    
+//    length=strlen((const char*)at_usart_tx_buf);		
+//    while((at_huart->Instance->SR&0X40)==0);
+//    for(i = 0;i < length;i ++)
+//    {			
+//        at_huart->Instance->DR = at_usart_tx_buf[i];
+//        while((at_huart->Instance->SR&0X40)==0);	
+//    }	
+//}
