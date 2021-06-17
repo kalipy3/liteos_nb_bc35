@@ -96,7 +96,6 @@ int main(void)
     if(uwRet != LOS_OK) {
         printf("LOS_KernelInit fail!\r\n");
     }
-   
     at_device_init();
 
     Create_Task();

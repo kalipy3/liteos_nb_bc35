@@ -13,7 +13,7 @@ static char at_usart_debug_rcv_data_buf[USART_DEBUG_RX_BUFFER_LEN];
 
 void at_usart_debug_msg_handler(char *buf, uint16_t len)
 {
-    printf("at_usart_debug_msg_handler()被调用..");
+    //printf("at_usart_debug_msg_handler()被调用..");
 }
 
 static void at_usart_debug_msg_listen(void) {
@@ -34,7 +34,7 @@ static void at_usart_debug_msg_listen(void) {
         }
 
         int len = at_usart_debug_get_msg_data((char *)at_usart_debug_rcv_data_buf, msg);//get到的msg_data保存到at_usart_rcv_data_buf
-        printf("get a msg from usart_debug:%s\n", (char *)at_usart_debug_rcv_data_buf);
+        printf("get a msg from usart_debug:%s\r\n", (char *)at_usart_debug_rcv_data_buf);
 
         at_usart_debug_msg_handler(at_usart_debug_rcv_data_buf, len);
 

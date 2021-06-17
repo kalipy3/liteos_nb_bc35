@@ -58,7 +58,7 @@
 #define AT_CGPADDR "AT+CGPADDR\r"
 #define AT_NPING "AT+NPING=223.5.5.5\r"
 #define AT_NSOCR "AT+NSOCR=DGRAM,17,8888,1\r"
-#define AT_NSOST "AT+NSOST=1,123.57.44.108,8888,2,ABCD\r"
+#define AT_NSOST "AT+NSOST=1,123.57.44.108,8888,5,68656C6C6F\r"
 #define AT_NSORF "AT+NSORF=1,256\r"
 
 uint32_t nb_cfun(uint8_t *presp);
@@ -68,6 +68,6 @@ uint32_t nb_cereg(uint8_t *presp);
 uint32_t nb_cgpaddr(uint8_t *presp);
 uint32_t nb_nping(uint8_t *presp);
 uint32_t nb_nsocr_udp(uint8_t *presp);
-uint32_t nb_nsost(uint8_t *presp);
+uint32_t nb_nsost(uint8_t *presp, char * req_data);
 uint32_t nb_nsorf(uint8_t *presp);
 #endif /* !BC35_H */

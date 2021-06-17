@@ -21,7 +21,7 @@ void Create_Task(void)
 void bc35Test_Task(void)
 {
     static int flag = 0;
-    static char presp[256];
+    static char presp[1];
     while(1) {
         LOS_TaskDelay(10000);
         //if (flag == 0) {
@@ -67,16 +67,16 @@ void bc35Test_Task(void)
             nb_nping(presp);
             LOS_TaskDelay(1000);
             nb_nsocr_udp(presp);
-            LOS_TaskDelay(1000);
             flag = 1;
             printf("---init ok---\r\n");
         }
 
         printf("---start---\r\n");
-        nb_nsost(presp);
-        LOS_TaskDelay(3000);
+            LOS_TaskDelay(1000);
+            static char str[] = "hello world";
+        nb_nsost(presp, str);
+            LOS_TaskDelay(3000);
         nb_nsorf(presp);
-        LOS_TaskDelay(1000);
         printf("---end---\r\n");
 
     }
@@ -89,7 +89,7 @@ void Create_bc35Test_Task(void)
     TSK_INIT_PARAM_S stInitParam1;
 
     stInitParam1.usTaskPrio = 9;
-    stInitParam1.uwStackSize = 0x400;
+    stInitParam1.uwStackSize = 0x800;
     stInitParam1.pcName = "test";
 
     stInitParam1.pfnTaskEntry = bc35Test_Task;

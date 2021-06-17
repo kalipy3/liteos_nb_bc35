@@ -6,6 +6,7 @@
  */
 
 #include "bc35.h"
+#include <hex2str_and_str2hex.h>
 
 extern uint32_t send_cmd(at_cmd_args_s *args);
 
@@ -482,14 +483,31 @@ uint32_t nb_nsocr_udp(uint8_t *presp)
     return ret;
 
 }
-uint32_t nb_nsost(uint8_t *presp)
+uint32_t nb_nsost(uint8_t *presp, char * req_data)
 {
     uint32_t ret;
     at_cmd_args_s args;
     const char *resp[] = {"OK", "ERROR"};
 
-    args.cmd = AT_NSOST;
-    args.cmd_len = strlen(AT_NSOST);
+    //args.cmd = AT_NSOST;
+    //char t_cmd[256] = "AT+NSOST=1,123.57.44.108,8888,5,";//这个地方一定要写长度，不然liteos会死掉
+    char t_cmd[256] = "AT+NSOST=1,123.57.44.108,8888,";
+
+    char req_data_len[4];
+    Int2String(strlen(req_data), req_data_len);//数字转字符串
+    strcat(t_cmd, req_data_len);
+    strcat(t_cmd, ",");
+    
+    char hex[256] = {0};
+    str2hex(req_data, hex);
+    strcat(t_cmd, hex);//数据载荷
+    strcat(t_cmd, "\r");
+    args.cmd = t_cmd;
+    //args.cmd = AT_NSOST;
+    printf("args.cmd:%s\r\n", args.cmd);
+    
+    //args.cmd_len = strlen(AT_NSOST);
+    args.cmd_len = strlen(args.cmd);
     args.resp_strs_expected = resp;
     args.resp_strs_expected_num = 2;
     ret = send_cmd(&args);
