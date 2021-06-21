@@ -38,4 +38,15 @@ typedef struct {
 
 void at_device_init(void);
 
+//+NSONMI: <socket>,<remote_addr>,<remote_port>,<length>,<data>
+typedef struct{
+	int socket;
+	char ip[20];
+	int port;
+	int len;
+} svr_dn_msg_parsed_s;
+
+#define UDP 1
+#define TCP	0
+
 #endif /* !AT_DEVICE_H */

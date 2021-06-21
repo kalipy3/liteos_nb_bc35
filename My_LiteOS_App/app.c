@@ -18,7 +18,7 @@ void Create_Task(void)
     at_frame_init();
 }
 
-void bc35Test_Task(void)
+void bc35_UDP_Test_Task(void)
 {
     static int flag = 0;
     static char presp[1];
@@ -26,7 +26,6 @@ void bc35Test_Task(void)
         LOS_TaskDelay(10000);
         //if (flag == 0) {
         //    printf("---init---\r\n");
-        //    at_usart_bc35_send("AT+CFUN?\r", strlen("AT+CFUN?\r"));
         //    LOS_TaskDelay(1000);
         //    at_usart_bc35_send("AT+CIMI\r", strlen("AT+CIMI\r"));
         //    LOS_TaskDelay(1000);
@@ -54,35 +53,38 @@ void bc35Test_Task(void)
         
         if (flag == 0) {
             printf("---init---\r\n");
+            at_usart_bc35_send("AT+CFUN=1\r", strlen("AT+CFUN=1\r"));
+            LOS_TaskDelay(3000);
             nb_cfun(presp);
             LOS_TaskDelay(1000);
+            at_usart_bc35_send("AT+CGATT=1\r", strlen("AT+CGATT=1\r"));
+            LOS_TaskDelay(3000);
             nb_cimi(presp);
             LOS_TaskDelay(1000);
             nb_csq(presp);
             LOS_TaskDelay(1000);
             nb_cereg(presp);
-            LOS_TaskDelay(1000);
+            LOS_TaskDelay(2000);
             nb_cgpaddr(presp);
-            LOS_TaskDelay(1000);
+            LOS_TaskDelay(3000);
             nb_nping(presp);
-            LOS_TaskDelay(1000);
+            LOS_TaskDelay(3000);
             nb_nsocr_udp(presp);
             flag = 1;
             printf("---init ok---\r\n");
         }
 
         printf("---start---\r\n");
-            LOS_TaskDelay(1000);
-            static char str[] = "hello world";
+        static char str[] = "hello udp_server, I'am liuyong!!";
         nb_nsost(presp, str);
-            LOS_TaskDelay(3000);
+        LOS_TaskDelay(3000);
         nb_nsorf(presp);
         printf("---end---\r\n");
 
     }
 }
 
-void Create_bc35Test_Task(void)
+void Create_bc35_UDP_Test_Task(void)
 {
     UINT32 uwRet = 0;
     UINT32 uwTask1;
@@ -92,10 +94,75 @@ void Create_bc35Test_Task(void)
     stInitParam1.uwStackSize = 0x800;
     stInitParam1.pcName = "test";
 
-    stInitParam1.pfnTaskEntry = bc35Test_Task;
+    stInitParam1.pfnTaskEntry = bc35_UDP_Test_Task;
     uwRet = LOS_TaskCreate(&uwTask1, &stInitParam1);
     if(uwRet != LOS_OK)
     {
-        printf("bc35Test_Task Create failed\r\n");
+        printf("bc35_UDP_Test_Task Create failed\r\n");
+    }
+}
+
+void bc35_TCP_Test_Task(void)
+{
+    static int flag = 0;
+    static char presp[1];
+    while(1) {
+        LOS_TaskDelay(10000);
+        if (flag == 0) {
+            printf("---init---\r\n");
+            at_usart_bc35_send("AT+CFUN=1\r", strlen("AT+CFUN=1\r"));
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+CFUN?\r", strlen("AT+CFUN?\r"));
+            LOS_TaskDelay(1000);
+            at_usart_bc35_send("AT+CGATT=1\r", strlen("AT+CGATT=1\r"));
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+CIMI\r", strlen("AT+CIMI\r"));
+            LOS_TaskDelay(1000);
+            at_usart_bc35_send("AT+CSQ\r", strlen("AT+CSQ\r"));
+            LOS_TaskDelay(1000);
+            at_usart_bc35_send("AT+CEREG?\r", strlen("AT+CEREG?\r"));
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+CGPADDR\r", strlen("AT+CGPADDR\r"));
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+NPING=223.5.5.5\r", strlen("AT+NPING=223.5.5.5\r"));
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+NSOCR=STREAM,6,9999,1\r", strlen("AT+NSOCR=STREAM,6,9999,1\r"));//create a tcp socket
+            LOS_TaskDelay(3000);
+            at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
+            LOS_TaskDelay(3000);
+            flag = 1;
+            printf("---init ok---\r\n");
+        }
+
+        //printf("---start---\r\n");
+        //at_usart_bc35_send("AT+NSOSD=1,2,ABCD\r", strlen("AT+NSOSD=1,2,ABCD\r"));//tcp send data
+        //LOS_TaskDelay(3000);
+        //at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
+        //printf("---end---\r\n");
+        
+        printf("---start---\r\n");
+        static char str[] = "hello tcp_server, I'am liuyong!!";
+        nb_nsosd(presp, str);
+        LOS_TaskDelay(3000);
+        at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
+        printf("---end---\r\n");
+    }
+}
+
+void Create_bc35_TCP_Test_Task(void)
+{
+    UINT32 uwRet = 0;
+    UINT32 uwTask1;
+    TSK_INIT_PARAM_S stInitParam1;
+
+    stInitParam1.usTaskPrio = 9;
+    stInitParam1.uwStackSize = 0x800;
+    stInitParam1.pcName = "test";
+
+    stInitParam1.pfnTaskEntry = bc35_TCP_Test_Task;
+    uwRet = LOS_TaskCreate(&uwTask1, &stInitParam1);
+    if(uwRet != LOS_OK)
+    {
+        printf("bc35_TCP_Test_Task Create failed\r\n");
     }
 }

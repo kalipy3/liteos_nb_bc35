@@ -9,28 +9,22 @@
 
 void connector(void)
 {
-    static int connected = 0;
-    static char presp[256];
-    while(1) {
+    uint32_t ret;
+    uint32_t is_connectted = 0;
+
+    while(1)
+    {
+
         LOS_TaskDelay(10*1000);
-        if (connected == 0) {
-            printf("---init---\r\n");
-            nb_cfun(presp);
-            nb_cimi(presp);
-            nb_csq(presp);
-            nb_cereg(presp);
-            nb_cgpaddr(presp);
-            nb_nping(presp);
-            nb_nsocr_udp(presp);
-            connected = 1;
-            printf("---init ok---\r\n");
+        if(is_connectted)
+        {
+            continue;
         }
 
-        //msg send test
-        printf("---start---\r\n");
-        nb_nsost(presp);
-        nb_nsorf(presp);
-        printf("---end---\r\n");
+        is_connectted = 1;
+
+        printf("--send_payload start..\n");
+        printf("--send_payload ending..\n");
 
     }
 }
@@ -42,7 +36,7 @@ void Create_BC35_Connectiontor_Task(void)
     TSK_INIT_PARAM_S stInitParam1;
 
     stInitParam1.usTaskPrio = 9;
-    stInitParam1.uwStackSize = 0x400;
+    stInitParam1.uwStackSize = 0x800;
     stInitParam1.pcName = "test";
 
     stInitParam1.pfnTaskEntry = connector;

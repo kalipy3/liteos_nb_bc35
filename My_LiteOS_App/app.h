@@ -9,6 +9,7 @@
 #define APP_H
 
 void Create_Task(void);
-void Create_bc35Test_Task(void);
+void Create_bc35_UDP_Test_Task(void);
+void Create_bc35_TCP_Test_Task(void);
 
 #endif /* !APP_H */
