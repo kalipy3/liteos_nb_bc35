@@ -12,3 +12,8 @@ void at_device_init(void){
     at_usart_debug_init();
     at_usart_init();
 }
+
+__weak void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
+{
+
+}

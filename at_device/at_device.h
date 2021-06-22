@@ -36,15 +36,18 @@ typedef struct {
     uint8_t cmd_type;
 } at_cmd_args_s;
 
-void at_device_init(void);
-
 //+NSONMI: <socket>,<remote_addr>,<remote_port>,<length>,<data>
 typedef struct{
-	int socket;
+	int socket_id;
 	char ip[20];
-	int port;
-	int len;
+	uint16_t port;
+    char *data;
+	uint16_t len;
+    uint8_t resp_code;
 } svr_dn_msg_parsed_s;
+
+void at_device_init(void);
+void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p);
 
 #define UDP 1
 #define TCP	0

@@ -15,6 +15,7 @@ typedef struct {
     uint32_t at_task_mux_id;
     uint32_t at_cmd_args_mux_id;
     uint32_t at_cmd_resp_sem_id;
+    uint32_t server_dnmsg_queue_id;
     at_cmd_args_s *pat_cmd_args;
 } at_frame_args_s;
 

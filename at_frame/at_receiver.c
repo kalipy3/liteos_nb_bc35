@@ -68,42 +68,23 @@ static void at_cmd_resp_match(char *buf, int len) {
 }
 
 static void svr_dn_msg_match(char *buf, int len) {
-    
-    //char a[32],b[32],c[32],d[32],e[32];
-    //int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%[^,],%s", a, b, c, d, e);
-    //if (match_cnt >=5) {
-    //    printf("svr_dn_msg_match() buf:%s\r\n", buf);
-    //    printf("match msg_data:%s,%s,%s,%s,%s\n", a, b, c, d, e);
-    //    printf("msg_body:%s\n", d);
-    //    printf("resp_code:%s\n", e);
-    //}
-    
-    if (len > 30) {
-        char socket_id[3],server_ip[32],port[32],body_len[32],body[256],resp_code[3];
-        int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%[^,],%[^,],%s", socket_id, server_ip, port, body_len, body, resp_code);
-        if (match_cnt >=6) {
-            printf("svr_dn_msg_match() buf:%s\r\n", buf);
-            printf("match msg_data:%s,%s,%s,%s,%s,%s\n", socket_id, server_ip, port, body_len, body, resp_code);
-            printf("socket_id:%s\n", socket_id);
-            printf("server_ip:%s\n", server_ip);
-            printf("port:%s\n", port);
-            printf("body_len:%s\n", body_len);
-            printf("body:%s\n", body);
-            printf("resp_code:%s\n", resp_code);
+   
+    uint32_t ret;
+    char *str, *str2;
+    //str = strstr(buf, "+NSONMI:");
 
-            char str_msg_body[256] = {0};//这里如果不初始化为0的话，解析出的str_msg_body会有一个<0x02>乱码,即msg_body_parsed打印出来会这样:msg_body_parsed:<0x02>hello world
-            hex2str(body, str_msg_body);
-            printf("msg_body_parsed:%s\n", str_msg_body);
+    if (strstr(buf, "9020")) {
+        printf("8888888888888888ggg:%s\r\n", buf);
+    //if (NULL != str) {
+    //    str2 = strstr("\r\n", str);
+
+        //uwRet = LOS_QueueWriteCopy(at_usart_debug_msg_queue_id, &msg, sizeof(at_usart_msg_s) , 0);//把消息发往上层处理
+        //ret = LOS_QueueWriteCopy(at_frame.server_dnmsg_queue_id, str, str2-str+2, LOS_NO_WAIT);
+        ret = LOS_QueueWriteCopy(at_frame.server_dnmsg_queue_id, buf, 512 , 0);
+        if (ret != LOS_OK) {
+            printf("server dn_msg write to liteos_queue fail!, err_code:0x%x\r\n", ret);
         }
-    }
-    
-    
-    //if (len > 30) {
-    //    printf("555555555555:%s\r\n", buf);
-    //    char a[32],b[32],c[32],d[32];
-    //    sscanf(buf, "%[^,],%[^,],%[^,],%s", a, b, c, d);
-    //    printf("%s,%s,%s,%s\n", a, b, c, d);
-    //}
+    } 
 }
 
 uint32_t create_at_receiver_task(void)
