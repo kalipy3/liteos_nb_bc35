@@ -12,6 +12,7 @@
 #include "usart_debug.h"
 #include "at_frame.h"
 #include "bc35.h"
+#include "adxl345.h"
 
 void Create_Task(void)
 {
@@ -75,8 +76,14 @@ void bc35_UDP_Test_Task(void)
         }
 
         printf("---start---\r\n");
-        static char str[] = "hello udp_server, I'am liuyong!!";
-        nb_nsost(presp, str);
+        //static char str[] = "hello udp_server, I'am liuyong!!";
+        
+        static char buf[512];
+        Adxl345_data adxl_data;
+        adxl345_data_get(&adxl_data);
+        sprintf(buf, "hello udp_server, I'am liuyong, this is my adxl345_data:{x:%d,y:%d,z:%d,xang:%d,yang:%d,zang:%d}", adxl_data.x, adxl_data.x, adxl_data.x, adxl_data.xang, adxl_data.yang, adxl_data.zang);
+        
+        nb_nsost(presp, buf);
         LOS_TaskDelay(3000);
         nb_nsorf(presp);
         printf("---end---\r\n");
@@ -126,9 +133,10 @@ void bc35_TCP_Test_Task(void)
             LOS_TaskDelay(3000);
             at_usart_bc35_send("AT+NPING=223.5.5.5\r", strlen("AT+NPING=223.5.5.5\r"));
             LOS_TaskDelay(3000);
-            at_usart_bc35_send("AT+NSOCR=STREAM,6,9999,1\r", strlen("AT+NSOCR=STREAM,6,9999,1\r"));//create a tcp socket
+            at_usart_bc35_send("AT+NSOCR=STREAM,6,9000,1\r", strlen("AT+NSOCR=STREAM,6,9000,1\r"));//create a tcp socket
             LOS_TaskDelay(3000);
-            at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
+            //at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
+            at_usart_bc35_send("AT+NSOCO=1,122.112.145.221,9000\r", strlen("AT+NSOCO=1,122.112.145.221,9000\r"));//tcp connect to server
             LOS_TaskDelay(3000);
             flag = 1;
             printf("---init ok---\r\n");
@@ -141,8 +149,14 @@ void bc35_TCP_Test_Task(void)
         //printf("---end---\r\n");
         
         printf("---start---\r\n");
-        static char str[] = "hello tcp_server, I'am liuyong!!";
-        nb_nsosd(presp, str);
+        //static char str[] = "hello tcp_server, I'am liuyong!!";
+
+        static char buf[512];
+        Adxl345_data adxl_data;
+        adxl345_data_get(&adxl_data);
+        sprintf(buf, "hello tcp_server, I'am liuyong, this is my adxl345_data:{x:%d,y:%d,z:%d,xang:%d,yang:%d,zang:%d}", adxl_data.x, adxl_data.x, adxl_data.x, adxl_data.xang, adxl_data.yang, adxl_data.zang);
+        
+        nb_nsosd(presp, buf);
         LOS_TaskDelay(3000);
         at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
         printf("---end---\r\n");

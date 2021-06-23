@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -30,6 +31,7 @@
 #include "at_device.h"
 #include "app.h"
 #include "connector.h"
+#include "adxl345_test_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,6 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   uwRet = LOS_KernelInit();
     if(uwRet != LOS_OK) {
@@ -99,11 +102,19 @@ int main(void)
     }
     at_device_init();
 
+    printf("adxl345 init start..\r\n");
+    while(ADXL345_Init()){
+        printf("ADXL345 Error!\r\n");
+        LOS_TaskDelay(200);
+    }
+    printf("ADXL345 OK!\r\n");
+    
     Create_Task();
     
-    Create_bc35_UDP_Test_Task();
+    //Create_bc35_UDP_Test_Task();
     //Create_BC35_Connectiontor_Task();
-    //Create_bc35_TCP_Test_Task();
+    Create_bc35_TCP_Test_Task();
+    //create_adxl345_receiver_task();
 
     LOS_Start();
   /* USER CODE END 2 */

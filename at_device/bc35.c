@@ -16,7 +16,8 @@ extern uint32_t send_cmd_ex(at_cmd_args_s *args);
 char receive_buf[256];
 void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
 {
-    if (strstr(buf, "9020")) {
+    //if (strstr(buf, "9020")) {
+    if (strstr(buf, "9000")) {
     //if (strstr(buf, "+NSONMI:")) {
         char socket_id[3],server_ip[32],port[32],body_len[32],body[256],resp_code[3];
         int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%[^,],%[^,],%s", socket_id, server_ip, port, body_len, body, resp_code);

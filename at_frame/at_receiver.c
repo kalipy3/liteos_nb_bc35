@@ -73,7 +73,8 @@ static void svr_dn_msg_match(char *buf, int len) {
     char *str, *str2;
     //str = strstr(buf, "+NSONMI:");
 
-    if (strstr(buf, "9020")) {
+    //if (strstr(buf, "9020")) {
+    if (strstr(buf, "9000")) {
         printf("8888888888888888ggg:%s\r\n", buf);
     //if (NULL != str) {
     //    str2 = strstr("\r\n", str);
