@@ -15,7 +15,6 @@
 ######################################
 TARGET = 4
 
-
 ######################################
 # building variables
 ######################################
@@ -72,6 +71,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 ./My_LiteOS_App/connector.c \
 ./My_LiteOS_App/server_msg_processor.c \
 ./My_LiteOS_App/adxl345_test_task.c \
+./My_LiteOS_App/pkg.c \
 Core/Src/i2c.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c
@@ -167,7 +167,7 @@ LDSCRIPT = STM32F407ZGTx_FLASH.ld
 LIBS = -lc -lm -lnosys 
 LIBDIR = 
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
-
+LDFLAGS += -u _printf_float
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 

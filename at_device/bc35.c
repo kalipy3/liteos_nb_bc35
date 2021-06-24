@@ -7,6 +7,7 @@
 
 #include "bc35.h"
 #include "hex2str_and_str2hex.h"
+#include "pkg.h"
 
 extern uint32_t send_cmd(at_cmd_args_s *args);
 
@@ -17,24 +18,33 @@ char receive_buf[256];
 void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
 {
     //if (strstr(buf, "9020")) {
-    if (strstr(buf, "9000")) {
+    //if (strstr(buf, "9000")) {
+    if (strstr(buf, "9999")) {
     //if (strstr(buf, "+NSONMI:")) {
-        char socket_id[3],server_ip[32],port[32],body_len[32],body[256],resp_code[3];
-        int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%[^,],%[^,],%s", socket_id, server_ip, port, body_len, body, resp_code);
+        char socket_id[3],server_ip[32],port[32],body[256],resp_code[3];
+        int body_len = 0;
+        int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%d,%[^,],%s", socket_id, server_ip, port, &body_len, body, resp_code);
         
         if (match_cnt == 6) {
             printf("svr_dn_msg_match() buf:%s\r\n", buf);
-            printf("match msg_data:%s,%s,%s,%s,%s,%s\n", socket_id, server_ip, port, body_len, body, resp_code);
+            printf("match msg_data:%s,%s,%s,%d,%s,%s\n", socket_id, server_ip, port, body_len, body, resp_code);
             printf("socket_id:%s\n", socket_id);
             printf("server_ip:%s\n", server_ip);
             printf("port:%s\n", port);
-            printf("body_len:%s\n", body_len);
+            printf("body_len:%d\n", body_len);
             printf("body:%s\n", body);
             printf("resp_code:%s\n", resp_code);
 
             char str_msg_body[256] = {0};//这里如果不初始化为0的话，解析出的str_msg_body会有一个<0x02>乱码,即msg_body_parsed打印出来会这样:msg_body_parsed:<0x02>hello world
-            hex2str(body, str_msg_body);
+            //hex2str(body, str_msg_body);
+            hex2str_ex(body, str_msg_body, body_len);
             printf("msg_body_parsed:%s\n", str_msg_body);
+
+            //解析服务器发来的响应包
+            pkg_head_s h;
+            pkg_obs_temp_humi_s p;
+            parse_temp_humi_pkg(str_msg_body, &h, &p);
+
         }
     }
 }
@@ -276,6 +286,45 @@ uint32_t nb_nsosd(uint8_t *presp, char * req_data)
     return ret;
 
 }
+
+//tcp send data
+uint32_t nb_nsosd_ex(uint8_t *presp, char * req_data,int data_len)
+{
+    uint32_t ret;
+    at_cmd_args_s args;
+    const char *resp[] = {"OK", "ERROR"};
+
+    //char t_cmd[256] = "AT+NSOSD=1,";//这个地方一定要写长度，不然liteos会死掉
+    char t_cmd[256] = "AT+NSOSD=1,";
+
+    char req_data_len[4];
+    Int2String(data_len, req_data_len);//数字转字符串
+    strcat(t_cmd, req_data_len);
+    strcat(t_cmd, ",");
+    
+    char hex[256] = {0};
+    str2hex_ex(req_data, hex, data_len);
+    strcat(t_cmd, hex);//数据载荷
+    strcat(t_cmd, "\r");
+    args.cmd = t_cmd;
+    printf("args.cmd:%s\r\n", args.cmd);
+    
+    args.cmd_len = strlen(args.cmd);
+    args.resp_strs_expected = resp;
+    args.resp_strs_expected_num = 2;
+    ret = send_cmd(&args);
+
+    if (LOS_OK == ret)
+    {
+        if (0 == args.match_idx)
+        {
+        }
+    }
+
+    return ret;
+
+}
+
 uint32_t nb_nsorf(uint8_t *presp)
 {
     uint32_t ret;

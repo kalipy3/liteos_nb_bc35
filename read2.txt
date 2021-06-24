@@ -1,0 +1,10 @@
+read2.txt
+
+:Author: kalipy
+:Email: kalipy@debian
+:Date: 2021-06-24 19:36
+
+arm-gcc默认printf不支持打印float浮点数，要支持的话请在Makefile中加入下面一行:
+
+LDFLAGS += -u _printf_float
+

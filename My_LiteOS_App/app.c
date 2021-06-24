@@ -13,6 +13,7 @@
 #include "at_frame.h"
 #include "bc35.h"
 #include "adxl345.h"
+#include "pkg.h"
 
 void Create_Task(void)
 {
@@ -135,8 +136,8 @@ void bc35_TCP_Test_Task(void)
             LOS_TaskDelay(3000);
             at_usart_bc35_send("AT+NSOCR=STREAM,6,9000,1\r", strlen("AT+NSOCR=STREAM,6,9000,1\r"));//create a tcp socket
             LOS_TaskDelay(3000);
-            //at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
-            at_usart_bc35_send("AT+NSOCO=1,122.112.145.221,9000\r", strlen("AT+NSOCO=1,122.112.145.221,9000\r"));//tcp connect to server
+            at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
+            //at_usart_bc35_send("AT+NSOCO=1,122.112.145.221,9000\r", strlen("AT+NSOCO=1,122.112.145.221,9000\r"));//tcp connect to server
             LOS_TaskDelay(3000);
             flag = 1;
             printf("---init ok---\r\n");
@@ -154,9 +155,22 @@ void bc35_TCP_Test_Task(void)
         static char buf[512];
         Adxl345_data adxl_data;
         adxl345_data_get(&adxl_data);
-        sprintf(buf, "hello tcp_server, I'am liuyong, this is my adxl345_data:{x:%d,y:%d,z:%d,xang:%d,yang:%d,zang:%d}", adxl_data.x, adxl_data.x, adxl_data.x, adxl_data.xang, adxl_data.yang, adxl_data.zang);
+        //sprintf(buf, "hello tcp_server, I'am liuyong, this is my adxl345_data:{x:%d,y:%d,z:%d,xang:%d,yang:%d,zang:%d}", adxl_data.x, adxl_data.x, adxl_data.x, adxl_data.xang, adxl_data.yang, adxl_data.zang);
+        //nb_nsosd(presp, buf);
         
-        nb_nsosd(presp, buf);
+        //打包
+        float temp = 12.0;
+        float humi = 27.0;
+        pkg_s pkg = build_temp_humi_pkg(temp, humi);
+        printf("pkg_len:%d\r\n\r\n", pkg.pkg_len);
+        printf("pkg.pkg_buf:---\r\n");
+        for (int i = 0; i < pkg.pkg_len; i++)
+        {
+            printf("pkg.pkg_buf[%d]:%x ", i, pkg.pkg_buf[i]);
+        }
+        printf("---\r\n");
+        nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
+
         LOS_TaskDelay(3000);
         at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
         printf("---end---\r\n");

@@ -32,5 +32,6 @@ uint32_t nb_nsost(uint8_t *presp, char * req_data);
 uint32_t nb_nsorf(uint8_t *presp);
 //tcp send data
 uint32_t nb_nsosd(uint8_t *presp, char * req_data);
+uint32_t nb_nsosd_ex(uint8_t *presp, char * req_data,int data_len);
 
 #endif /* !BC35_H */

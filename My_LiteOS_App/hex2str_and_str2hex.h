@@ -13,7 +13,11 @@
 //str="^&%$:.," --> hex="5e2625243a2e2c"
 void str2hex(char * str, char * hex);
 
+void str2hex_ex(char * str, char * hex,int str_len);
+
 void hex2str(char * hex, char * str);
+
+void hex2str_ex(char * hex, char * str, int hex_len);
 
 void Int2String(int num,char *str);
 
