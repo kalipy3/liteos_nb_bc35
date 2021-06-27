@@ -12,12 +12,11 @@
 #include "stdint.h"
 #include "string.h"
 
-#define TARGET_TEMP_HUMI 0x01
-#define PKG_OBSV 0x02
-
 uint16_t get_check_sum(uint16_t len);
 
 void build_head(uint16_t len, uint8_t type);
+
+void build_tail(uint16_t len);
 
 pkg_s build_temp_humi_pkg(float temp, float humi);
 

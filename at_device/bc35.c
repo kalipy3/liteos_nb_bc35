@@ -19,7 +19,7 @@ void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
 {
     //if (strstr(buf, "9020")) {
     //if (strstr(buf, "9000")) {
-    if (strstr(buf, "9999")) {
+    if (strstr(buf, "8282")) {
     //if (strstr(buf, "+NSONMI:")) {
         char socket_id[3],server_ip[32],port[32],body[256],resp_code[3];
         int body_len = 0;

@@ -53,4 +53,11 @@ typedef struct {
 //} pkg_body_s;
 
 #pragma pack()
+
+#define TARGET_TEMP_HUMI 0x01
+#define TARGET_LED 0x02
+
+#define PKG_ACTION 0x01
+#define PKG_OBSV 0x02
+
 #endif /* !PKG_TYPEDEF_H */

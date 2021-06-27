@@ -11,6 +11,7 @@
 #include "at_device.h"
 #include "liteos.h"
 #include "at_frame.h"
+#include "pkg.h"
 
 uint32_t create_server_dn_msg_receiver_task(void);
 

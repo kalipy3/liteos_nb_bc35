@@ -9,6 +9,45 @@
 
 char server_dnmsg_buf[512];
 
+int is_valid_pkg(char *pkg)
+{
+    return 1;
+}
+
+void server_pkg_process(svr_dn_msg_parsed_s *parsed)
+{
+    pkg_head_s *h;
+    char *p;
+    pkg_s pkg;
+    uint8_t target;
+
+    if (!is_valid_pkg(parsed->data))
+    {
+        printf("the pkg from server is bad!\r\n");
+        return;
+    }
+    h = (pkg_head_s *)(parsed->data);
+    p = parsed->data + sizeof(pkg_head_s);
+
+    switch (h->type)
+    {
+        case PKG_OBSV:
+            target = ((pkg_observer_s *)p)->target;
+            if (TARGET_TEMP_HUMI == target)
+            {
+                pkg = build_temp_humi_pkg(12.0, 27.0);
+                //send_payload(at_frame.socket, pkg.pkg_buf, pkg.pkg_len, "127.0.0.1", 9999, UDP);
+            } else if (TARGET_LED == target) {
+                
+            }
+            break;
+        case PKG_ACTION:
+            break;
+        default:
+            printf("the pkg from server not support!\r\n");
+    }
+}
+
 static void server_dnmsg_listen(void) {
 
     UINT32 uwRet = 0;
@@ -29,6 +68,8 @@ static void server_dnmsg_listen(void) {
 
         parsed_msg.data = server_dnmsg_buf;
         at_device_svr_dn_msg_parse(server_dnmsg_buf, &parsed_msg);
+
+        //server_pkg_process(&parsed_msg);
     }
 }
 

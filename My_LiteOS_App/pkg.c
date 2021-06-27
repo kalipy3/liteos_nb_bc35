@@ -12,7 +12,7 @@ int32_t term_id = 1000;
 
 uint16_t get_check_sum(uint16_t len)
 {
-    uint16_t sum;
+    uint16_t sum = 0;
     uint16_t *p;
     p = (uint16_t *)pkg_buf;
     for (int i = 0; i < len; i++)
@@ -30,10 +30,18 @@ void build_head(uint16_t len, uint8_t type)
 {
     pkg_head_s *p;
     p = (pkg_head_s *)pkg_buf;
+    p->tag[0] = 'I';
+    p->tag[1] = 'O';
+    p->tag[2] = 'T';
     p->len = len;
     p->type = type;
     p->id = term_id;
     p->check_sum = 0;
+}
+
+void build_tail(uint16_t len)
+{
+    snprintf(pkg_buf+len-2, 10, "%s", "\r\n");
 }
 
 pkg_s build_temp_humi_pkg(float temp, float humi)
@@ -48,6 +56,7 @@ pkg_s build_temp_humi_pkg(float temp, float humi)
     p->target = TARGET_TEMP_HUMI;
     len = sizeof(pkg_head_s) + sizeof(pkg_obs_temp_humi_s) + 2;
     build_head(len, PKG_OBSV);
+    build_tail(len);
     h = (pkg_head_s *)pkg_buf;
     h->check_sum = get_check_sum(len);
 

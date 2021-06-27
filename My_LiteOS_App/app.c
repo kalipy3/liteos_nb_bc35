@@ -136,7 +136,8 @@ void bc35_TCP_Test_Task(void)
             LOS_TaskDelay(3000);
             at_usart_bc35_send("AT+NSOCR=STREAM,6,9000,1\r", strlen("AT+NSOCR=STREAM,6,9000,1\r"));//create a tcp socket
             LOS_TaskDelay(3000);
-            at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
+            at_usart_bc35_send("AT+NSOCO=1,150.158.178.83,8282\r", strlen("AT+NSOCO=1,150.158.178.83,8282\r"));//tcp connect to server
+            //at_usart_bc35_send("AT+NSOCO=1,123.57.44.108,9999\r", strlen("AT+NSOCO=1,123.57.44.108,9999\r"));//tcp connect to server
             //at_usart_bc35_send("AT+NSOCO=1,122.112.145.221,9000\r", strlen("AT+NSOCO=1,122.112.145.221,9000\r"));//tcp connect to server
             LOS_TaskDelay(3000);
             flag = 1;
@@ -171,7 +172,7 @@ void bc35_TCP_Test_Task(void)
         printf("---\r\n");
         nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
 
-        LOS_TaskDelay(3000);
+        LOS_TaskDelay(4000);
         at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
         printf("---end---\r\n");
     }

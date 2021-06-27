@@ -75,7 +75,7 @@ static void svr_dn_msg_match(char *buf, int len) {
 
     //if (strstr(buf, "9020")) {
     //if (strstr(buf, "9000")) {
-    if (strstr(buf, "9999")) {
+    if (strstr(buf, "8282")) {
         printf("8888888888888888ggg:%s\r\n", buf);
     //if (NULL != str) {
     //    str2 = strstr("\r\n", str);
