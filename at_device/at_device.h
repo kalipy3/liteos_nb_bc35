@@ -41,7 +41,8 @@ typedef struct{
 	int socket_id;
 	char ip[20];
 	uint16_t port;
-    char *data;
+    //char *data;
+    char data[256];
 	uint16_t len;
     uint8_t resp_code;
 } svr_dn_msg_parsed_s;

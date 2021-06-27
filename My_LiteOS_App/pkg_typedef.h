@@ -56,6 +56,9 @@ typedef struct {
 
 #define TARGET_TEMP_HUMI 0x01
 #define TARGET_LED 0x02
+#define TARGET_IOT 0x03
+
+#define ACT_BIND_TERMID_TO_UID 0x01
 
 #define PKG_ACTION 0x01
 #define PKG_OBSV 0x02

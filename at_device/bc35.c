@@ -21,30 +21,29 @@ void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
     //if (strstr(buf, "9000")) {
     if (strstr(buf, "8282")) {
     //if (strstr(buf, "+NSONMI:")) {
-        char socket_id[3],server_ip[32],port[32],body[256],resp_code[3];
-        int body_len = 0;
-        int match_cnt = sscanf(buf, "%[^,],%[^,],%[^,],%d,%[^,],%s", socket_id, server_ip, port, &body_len, body, resp_code);
+        char body[256];
+        int match_cnt = sscanf(buf, "%d,%[^,],%d,%d,%[^,],%d", &(p->socket_id), p->ip, &(p->port), &(p->len), body, &(p->resp_code));
         
         if (match_cnt == 6) {
             printf("svr_dn_msg_match() buf:%s\r\n", buf);
-            printf("match msg_data:%s,%s,%s,%d,%s,%s\n", socket_id, server_ip, port, body_len, body, resp_code);
-            printf("socket_id:%s\n", socket_id);
-            printf("server_ip:%s\n", server_ip);
-            printf("port:%s\n", port);
-            printf("body_len:%d\n", body_len);
+            printf("match msg_data:\n");
+            printf("socket_id:%d\n", p->socket_id);
+            printf("server_ip:%s\n", p->ip);
+            printf("port:%d\n", p->port);
+            printf("body_len:%d\n", p->len);
             printf("body:%s\n", body);
-            printf("resp_code:%s\n", resp_code);
+            printf("resp_code:%d\n", p->resp_code);
 
-            char str_msg_body[256] = {0};//这里如果不初始化为0的话，解析出的str_msg_body会有一个<0x02>乱码,即msg_body_parsed打印出来会这样:msg_body_parsed:<0x02>hello world
+            //char str_msg_body[256] = {0};//这里如果不初始化为0的话，解析出的str_msg_body会有一个<0x02>乱码,即msg_body_parsed打印出来会这样:msg_body_parsed:<0x02>hello world
             //hex2str(body, str_msg_body);
-            hex2str_ex(body, str_msg_body, body_len);
-            printf("msg_body_parsed:%s\n", str_msg_body);
+            hex2str_ex(body, p->data, p->len);
+            printf("msg_body_parsed:%s\n", p->data);
+            //p->data = str_msg_body;
 
             //解析服务器发来的响应包
-            pkg_head_s h;
-            pkg_obs_temp_humi_s p;
-            parse_temp_humi_pkg(str_msg_body, &h, &p);
-
+            //pkg_head_s h;
+            //pkg_obs_temp_humi_s p;
+            //parse_temp_humi_pkg(str_msg_body, &h, &p);
         }
     }
 }

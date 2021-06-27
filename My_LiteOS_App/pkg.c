@@ -83,3 +83,46 @@ void parse_temp_humi_pkg(char *raw_pkg, pkg_head_s *h, pkg_obs_temp_humi_s *p)
     printf("p.temp:%f\r\n",p->temp);
     printf("p.target:%d\r\n\r\n",p->target);
 }
+
+//typedef struct {
+//    uint8_t target;
+//    uint8_t act;
+//} pkg_act_s;
+//绑定iot的termid到php服务端的uid
+pkg_s build_bind_termid_to_uid_pkg()
+{
+    uint16_t len;
+    pkg_act_s *p;
+    pkg_head_s *h;
+
+    p = (pkg_act_s *)(pkg_buf + sizeof(pkg_head_s));
+    p->target = TARGET_IOT;
+    p->act = ACT_BIND_TERMID_TO_UID;
+    len = sizeof(pkg_head_s) + sizeof(pkg_act_s) + 2;
+    build_head(len, PKG_ACTION);
+    build_tail(len);
+    h = (pkg_head_s *)pkg_buf;
+    h->check_sum = get_check_sum(len);
+
+    pkg_s pkg;
+    pkg.pkg_buf = pkg_buf;
+    pkg.pkg_len = len;
+
+    return pkg;
+}
+
+void parse_bind_termid_to_uid_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p)
+{
+    memcpy((void *)h, (void *)raw_pkg, sizeof(pkg_head_s));
+    printf("--pkg_head_s--\r\n");
+    printf("h.id:%d\r\n",h->id);
+    printf("h.check_sum:%d\r\n",h->check_sum);
+    printf("h.tag:%s\r\n",h->tag);
+    printf("h.len:%d\r\n",h->len);
+    printf("h.type:%d\r\n\r\n",h->type);
+
+    memcpy((void *)p, (void *)(raw_pkg+sizeof(pkg_head_s)), sizeof(pkg_act_s));
+    printf("--pkg_act_s--\r\n");
+    printf("p.act:%d\r\n",p->act);
+    printf("p.target:%d\r\n\r\n",p->target);
+}

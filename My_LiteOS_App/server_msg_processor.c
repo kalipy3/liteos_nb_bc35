@@ -28,20 +28,33 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
     }
     h = (pkg_head_s *)(parsed->data);
     p = parsed->data + sizeof(pkg_head_s);
-
+    
     switch (h->type)
     {
         case PKG_OBSV:
-            target = ((pkg_observer_s *)p)->target;
-            if (TARGET_TEMP_HUMI == target)
+            //target = ((pkg_observer_s *)p)->target;
+            //if (TARGET_TEMP_HUMI == target)
+            //{
+            //    pkg = build_temp_humi_pkg(12.0, 27.0);
+            //    //send_payload(at_frame.socket, pkg.pkg_buf, pkg.pkg_len, "127.0.0.1", 9999, UDP);
+            //} else if (TARGET_LED == target) {
+            //    
+            //}
+            //break;
+        case PKG_ACTION:
+            target = ((pkg_act_s *)p)->target;
+            if (TARGET_IOT == target)
             {
-                pkg = build_temp_humi_pkg(12.0, 27.0);
-                //send_payload(at_frame.socket, pkg.pkg_buf, pkg.pkg_len, "127.0.0.1", 9999, UDP);
+
+                //解析服务器发来的响应包
+                pkg_act_s tp;
+                pkg_head_s th;
+                parse_bind_termid_to_uid_pkg(parsed->data, &th, &tp);
+
             } else if (TARGET_LED == target) {
                 
             }
-            break;
-        case PKG_ACTION:
+
             break;
         default:
             printf("the pkg from server not support!\r\n");
@@ -66,10 +79,9 @@ static void server_dnmsg_listen(void) {
 
         printf("get a dn_msg from server:%s\r\n", (char *)server_dnmsg_buf);
 
-        parsed_msg.data = server_dnmsg_buf;
         at_device_svr_dn_msg_parse(server_dnmsg_buf, &parsed_msg);
 
-        //server_pkg_process(&parsed_msg);
+        server_pkg_process(&parsed_msg);
     }
 }
 

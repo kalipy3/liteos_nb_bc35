@@ -22,4 +22,8 @@ pkg_s build_temp_humi_pkg(float temp, float humi);
 
 void parse_temp_humi_pkg(char *raw_pkg, pkg_head_s *h, pkg_obs_temp_humi_s *p);
 
+pkg_s build_bind_termid_to_uid_pkg();
+
+void parse_bind_termid_to_uid_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p);
+
 #endif /* !PKG_H */
