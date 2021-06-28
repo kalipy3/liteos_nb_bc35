@@ -42,14 +42,18 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
             //}
             //break;
         case PKG_ACTION:
-            target = ((pkg_act_s *)p)->target;
+
+            ////服务端对iot pkg_act_s请求的响应包
+            //typedef struct {
+            //    uint8_t resp_code;
+            //} pkg_act_resp_s;
+            target = ((pkg_act_resp_s *)p)->target;
             if (TARGET_IOT == target)
             {
-
                 //解析服务器发来的响应包
-                pkg_act_s tp;
+                pkg_act_resp_s tp;
                 pkg_head_s th;
-                parse_bind_termid_to_uid_pkg(parsed->data, &th, &tp);
+                parse_bind_termid_to_uid_resp_pkg(parsed->data, &th, &tp);
 
             } else if (TARGET_LED == target) {
                 

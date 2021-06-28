@@ -17,6 +17,7 @@ typedef struct {
     uint16_t len;
     uint8_t type;
     uint32_t id;//终端id
+    uint8_t seq;
     uint16_t check_sum;
 } pkg_head_s;
 
@@ -24,6 +25,12 @@ typedef struct {
     uint8_t target;
     uint8_t act;
 } pkg_act_s;
+
+//服务端对iot pkg_act_s请求的响应包
+typedef struct {
+    uint8_t target;
+    uint8_t resp_code;
+} pkg_act_resp_s;
 
 typedef struct {
     uint8_t target;

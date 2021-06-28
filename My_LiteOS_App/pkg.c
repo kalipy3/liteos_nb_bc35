@@ -126,3 +126,20 @@ void parse_bind_termid_to_uid_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p)
     printf("p.act:%d\r\n",p->act);
     printf("p.target:%d\r\n\r\n",p->target);
 }
+
+void parse_bind_termid_to_uid_resp_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_resp_s *p)
+{
+    memcpy((void *)h, (void *)raw_pkg, sizeof(pkg_head_s));
+    printf("--resp_pkg_head_s--\r\n");
+    printf("h.id:%d\r\n",h->id);
+    printf("h.check_sum:%d\r\n",h->check_sum);
+    printf("h.tag:%s\r\n",h->tag);
+    printf("h.len:%d\r\n",h->len);
+    printf("h.seq:%d\r\n",h->seq);
+    printf("h.type:%d\r\n\r\n",h->type);
+
+    memcpy((void *)p, (void *)(raw_pkg+sizeof(pkg_head_s)), sizeof(pkg_act_resp_s));
+    printf("--resp_pkg_act_s--\r\n");
+    printf("p.target:%d\r\n",p->target);
+    printf("p.resp_code:%d\r\n\r\n",p->resp_code);
+}
