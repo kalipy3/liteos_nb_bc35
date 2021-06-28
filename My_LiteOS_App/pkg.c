@@ -26,7 +26,7 @@ uint16_t get_check_sum(uint16_t len)
     return sum;
 }
 
-void build_head(uint16_t len, uint8_t type)
+void build_head(uint16_t len, uint8_t type, uint8_t seq)
 {
     pkg_head_s *p;
     p = (pkg_head_s *)pkg_buf;
@@ -36,6 +36,7 @@ void build_head(uint16_t len, uint8_t type)
     p->len = len;
     p->type = type;
     p->id = term_id;
+    p->seq = seq;
     p->check_sum = 0;
 }
 
@@ -55,7 +56,7 @@ pkg_s build_temp_humi_pkg(float temp, float humi)
     p->temp = temp;
     p->target = TARGET_TEMP_HUMI;
     len = sizeof(pkg_head_s) + sizeof(pkg_obs_temp_humi_s) + 2;
-    build_head(len, PKG_OBSV);
+    build_head(len, PKG_OBSV, 0);
     build_tail(len);
     h = (pkg_head_s *)pkg_buf;
     h->check_sum = get_check_sum(len);
@@ -99,7 +100,45 @@ pkg_s build_bind_termid_to_uid_pkg()
     p->target = TARGET_IOT;
     p->act = ACT_BIND_TERMID_TO_UID;
     len = sizeof(pkg_head_s) + sizeof(pkg_act_s) + 2;
-    build_head(len, PKG_ACTION);
+    build_head(len, PKG_ACTION, 0);
+    build_tail(len);
+    h = (pkg_head_s *)pkg_buf;
+    h->check_sum = get_check_sum(len);
+
+    pkg_s pkg;
+    pkg.pkg_buf = pkg_buf;
+    pkg.pkg_len = len;
+
+    return pkg;
+}
+
+void parse_pkg_act_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p)
+{
+    memcpy((void *)h, (void *)raw_pkg, sizeof(pkg_head_s));
+    printf("parse_pkg_act_pkg() --pkg_head_s--\r\n");
+    printf("h.id:%d\r\n",h->id);
+    printf("h.check_sum:%d\r\n",h->check_sum);
+    printf("h.tag:%s\r\n",h->tag);
+    printf("h.len:%d\r\n",h->len);
+    printf("h.type:%d\r\n\r\n",h->type);
+
+    memcpy((void *)p, (void *)(raw_pkg+sizeof(pkg_head_s)), sizeof(pkg_act_s));
+    printf("--pkg_act_s--\r\n");
+    printf("p.act:%d\r\n",p->act);
+    printf("p.target:%d\r\n\r\n",p->target);
+}
+
+pkg_s build_pkg_act_resp_pkg(pkg_head_s *args_h, pkg_act_s *args_p, uint8_t resp_code)
+{
+    uint16_t len;
+    pkg_act_resp_s *p;
+    pkg_head_s *h;
+
+    p = (pkg_act_resp_s *)(pkg_buf + sizeof(pkg_head_s));
+    p->target = args_p->target;
+    p->resp_code = resp_code;
+    len = sizeof(pkg_head_s) + sizeof(pkg_act_resp_s) + 2;
+    build_head(len, PKG_ACTION, args_h->seq);
     build_tail(len);
     h = (pkg_head_s *)pkg_buf;
     h->check_sum = get_check_sum(len);

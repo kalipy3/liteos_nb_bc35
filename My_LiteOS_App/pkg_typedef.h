@@ -66,6 +66,8 @@ typedef struct {
 #define TARGET_IOT 0x03
 
 #define ACT_BIND_TERMID_TO_UID 0x01
+#define ACT_LED_ON 0x02
+#define ACT_LED_OFF 0x03
 
 #define PKG_ACTION 0x01
 #define PKG_OBSV 0x02

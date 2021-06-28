@@ -136,7 +136,6 @@ void bc35_TCP_Test_Task(void)
             LOS_TaskDelay(3000);
             flag = 1;
             printf("---init ok---\r\n");
-        }
 
         //printf("---start---\r\n");
         //at_usart_bc35_send("AT+NSOSD=1,2,ABCD\r", strlen("AT+NSOSD=1,2,ABCD\r"));//tcp send data
@@ -180,6 +179,7 @@ void bc35_TCP_Test_Task(void)
         }
         printf("---\r\n");
         nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
+        }
 
         LOS_TaskDelay(3000);
         at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data

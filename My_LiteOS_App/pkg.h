@@ -14,13 +14,17 @@
 
 uint16_t get_check_sum(uint16_t len);
 
-void build_head(uint16_t len, uint8_t type);
+void build_head(uint16_t len, uint8_t type, uint8_t seq);
 
 void build_tail(uint16_t len);
 
 pkg_s build_temp_humi_pkg(float temp, float humi);
 
 void parse_temp_humi_pkg(char *raw_pkg, pkg_head_s *h, pkg_obs_temp_humi_s *p);
+
+void parse_pkg_act_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p);
+
+pkg_s build_pkg_act_resp_pkg(pkg_head_s *args_h, pkg_act_s *args_p, uint8_t resp_code);
 
 pkg_s build_bind_termid_to_uid_pkg();
 void parse_bind_termid_to_uid_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_s *p);

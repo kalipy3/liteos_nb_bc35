@@ -6,6 +6,8 @@
  */
 
 #include "server_msg_processor.h"
+#include "led.h"
+#include "bc35.h"
 
 char server_dnmsg_buf[512];
 
@@ -56,7 +58,31 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
                 parse_bind_termid_to_uid_resp_pkg(parsed->data, &th, &tp);
 
             } else if (TARGET_LED == target) {
-                
+                printf("get a req pkg from server..\r\n");
+                //解析服务器发来的请求包
+                pkg_act_s tp;
+                pkg_head_s th;
+                parse_pkg_act_pkg(parsed->data, &th, &tp);
+
+                if (tp.act == ACT_LED_ON)
+                {
+                    drv_led_on(led0);
+                } else if (tp.act == ACT_LED_OFF) {
+                    drv_led_off(led0);
+                }
+
+                //构造该请求的响应包
+                uint8_t resp_code = 0;//success
+                pkg_s pkg = build_pkg_act_resp_pkg(&th, &tp, resp_code);
+                printf("pkg_len:%d\r\n\r\n", pkg.pkg_len);
+                printf("pkg.pkg_buf:---\r\n");
+                for (int i = 0; i < pkg.pkg_len; i++)
+                {
+                    printf("pkg.pkg_buf[%d]:%x ", i, pkg.pkg_buf[i]);
+                }
+                printf("---\r\n");
+                static char presp[1];
+                nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
             }
 
             break;
