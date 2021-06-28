@@ -9,6 +9,7 @@
 #include "bc35.h"
 
 void at_device_init(void){
+    drv_led_init();
     at_usart_debug_init();
     at_usart_init();
 }

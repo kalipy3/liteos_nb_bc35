@@ -10,6 +10,7 @@
 #include "stdint.h"
 #include "liteos.h"
 //#include "at_usart.h"
+#include "led.h"
 
 #ifndef AT_DEVICE_H
 #define AT_DEVICE_H

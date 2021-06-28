@@ -16,6 +16,7 @@
 #include "los_queue.h"
 #include "los_event.h"
 #include "los_typedef.h"
+#include "los_tick.h"
 
 #ifndef LITEOS_H
 #define LITEOS_H

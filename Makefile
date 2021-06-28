@@ -66,6 +66,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 ./at_frame/at_transmitter.c \
 ./My_Drivers/drv_usart_debug.c \
 ./My_Drivers/adxl345.c \
+./My_Drivers/led.c \
 ./My_LiteOS_App/usart_debug.c \
 ./My_LiteOS_App/hex2str_and_str2hex.c \
 ./My_LiteOS_App/connector.c \
