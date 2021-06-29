@@ -44,20 +44,28 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
             //}
             //break;
         case PKG_ACTION:
-
+            //数据上报类型的包
             ////服务端对iot pkg_act_s请求的响应包
             //typedef struct {
+            //    uint8_t target;
             //    uint8_t resp_code;
             //} pkg_act_resp_s;
             target = ((pkg_act_resp_s *)p)->target;
             if (TARGET_IOT == target)
             {
+                printf("get a resp pkg from server..\r\n");
                 //解析服务器发来的响应包
                 pkg_act_resp_s tp;
                 pkg_head_s th;
                 parse_bind_termid_to_uid_resp_pkg(parsed->data, &th, &tp);
 
-            } else if (TARGET_LED == target) {
+            }
+            
+            //--------------------------------------------------------------- 
+            //数据由php_server下发类型的包
+            ////服务端对iot pkg_act_s的请求包
+            target = ((pkg_act_s *)p)->target;
+            if (TARGET_LED == target) {
                 printf("get a req pkg from server..\r\n");
                 //解析服务器发来的请求包
                 pkg_act_s tp;
@@ -66,8 +74,10 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
 
                 if (tp.act == ACT_LED_ON)
                 {
+                    printf("led on..\r\n");
                     drv_led_on(led0);
                 } else if (tp.act == ACT_LED_OFF) {
+                    printf("led off..\r\n");
                     drv_led_off(led0);
                 }
 
