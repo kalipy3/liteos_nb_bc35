@@ -59,6 +59,28 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
                 static char presp[1];
                 nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
 
+            } else if (TARGET_ADXL == target) {
+                printf("get a req pkg from server..\r\n");
+                //解析服务器发来的请求包
+                pkg_observer_s tp;
+                pkg_head_s th;
+                parse_pkg_observer_pkg(parsed->data, &th, &tp);
+
+                //构造该请求的响应包
+                uint8_t resp_code = 0;//success
+                Adxl345_data adxl_data;
+                adxl345_data_get(&adxl_data);
+                pkg_s pkg = build_pkg_observer_adxl_resp_pkg(&th, &tp, &adxl_data, resp_code);
+                printf("pkg_len:%d\r\n\r\n", pkg.pkg_len);
+                printf("pkg.pkg_buf:---\r\n");
+                for (int i = 0; i < pkg.pkg_len; i++)
+                {
+                    printf("pkg.pkg_buf[%d]:%x ", i, pkg.pkg_buf[i]);
+                }
+                printf("---\r\n");
+                static char presp[1];
+                nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
+
             } else if (TARGET_LED == target) {
                 
             }

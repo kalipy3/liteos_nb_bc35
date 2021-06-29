@@ -11,6 +11,7 @@
 #include "pkg_typedef.h"
 #include "stdint.h"
 #include "string.h"
+#include "adxl345.h"
 
 uint16_t get_check_sum(uint16_t len);
 
@@ -33,5 +34,9 @@ void parse_bind_termid_to_uid_resp_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_res
 //温度湿度获取请求包的解析和响应
 void parse_pkg_observer_pkg(char *raw_pkg, pkg_head_s *h, pkg_observer_s *p);
 pkg_s build_pkg_observer_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_p, float temp, float humi, uint8_t resp_code);
+
+//adxl数据获取请求包的解析和响应
+void parse_pkg_observer_adxl_pkg(char *raw_pkg, pkg_head_s *h, pkg_observer_s *p);
+pkg_s build_pkg_observer_adxl_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_p, Adxl345_data *adxl_data, uint8_t resp_code);
 
 #endif /* !PKG_H */

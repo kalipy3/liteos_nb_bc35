@@ -36,13 +36,25 @@ typedef struct {
     uint8_t target;
 } pkg_observer_s;
 
-//服务端对iot pkg_observer_s请求的响应包
+//服务端对iot pkg_observer_s(观察TEMP_HUMI)请求的响应包
 typedef struct {
     uint8_t target;
     float temp;
     float humi;
     uint8_t resp_code;
 } pkg_observer_resp_s;
+
+//服务端对iot pkg_observer_s(观察ADXL)请求的响应包
+typedef struct {
+    uint8_t target;
+    int16_t x;
+    int16_t y;
+    int16_t z;
+    float xang;
+    float yang;
+    float zang;
+    uint8_t resp_code;
+} pkg_observer_adxl_resp_s;
 
 typedef struct {//在不对齐的情况下是9个字节
     uint8_t target;
@@ -72,6 +84,7 @@ typedef struct {
 #define TARGET_TEMP_HUMI 0x01
 #define TARGET_LED 0x02
 #define TARGET_IOT 0x03
+#define TARGET_ADXL 0x04
 
 #define ACT_BIND_TERMID_TO_UID 0x01
 #define ACT_LED_ON 0x02

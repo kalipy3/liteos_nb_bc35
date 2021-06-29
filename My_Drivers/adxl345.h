@@ -51,9 +51,9 @@ typedef struct Adxl345_data
     int16_t x;
     int16_t y;
     int16_t z;
-    int xang;
-    int yang;
-    int zang;
+    float xang;
+    float yang;
+    float zang;
 } Adxl345_data;
 
 /*ADXL345初始化函数：成功返回0，失败返回1*/
