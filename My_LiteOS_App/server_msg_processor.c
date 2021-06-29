@@ -34,15 +34,35 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
     switch (h->type)
     {
         case PKG_OBSV:
-            //target = ((pkg_observer_s *)p)->target;
-            //if (TARGET_TEMP_HUMI == target)
-            //{
-            //    pkg = build_temp_humi_pkg(12.0, 27.0);
-            //    //send_payload(at_frame.socket, pkg.pkg_buf, pkg.pkg_len, "127.0.0.1", 9999, UDP);
-            //} else if (TARGET_LED == target) {
-            //    
-            //}
-            //break;
+            //--------------------------------------------------------------- 
+            //数据由php_server下发类型的包
+            ////服务端对iot pkg_observer_s的请求包
+            target = ((pkg_observer_s *)p)->target;
+            if (TARGET_TEMP_HUMI == target)
+            {
+                printf("get a req pkg from server..\r\n");
+                //解析服务器发来的请求包
+                pkg_observer_s tp;
+                pkg_head_s th;
+                parse_pkg_observer_pkg(parsed->data, &th, &tp);
+
+                //构造该请求的响应包
+                uint8_t resp_code = 0;//success
+                pkg_s pkg = build_pkg_observer_resp_pkg(&th, &tp, 12.0, 27.0, resp_code);//由于我开发板没有温度湿度，所以直接硬编码假数据
+                printf("pkg_len:%d\r\n\r\n", pkg.pkg_len);
+                printf("pkg.pkg_buf:---\r\n");
+                for (int i = 0; i < pkg.pkg_len; i++)
+                {
+                    printf("pkg.pkg_buf[%d]:%x ", i, pkg.pkg_buf[i]);
+                }
+                printf("---\r\n");
+                static char presp[1];
+                nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
+
+            } else if (TARGET_LED == target) {
+                
+            }
+            break;
         case PKG_ACTION:
             //数据上报类型的包
             ////服务端对iot pkg_act_s请求的响应包

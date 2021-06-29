@@ -36,6 +36,14 @@ typedef struct {
     uint8_t target;
 } pkg_observer_s;
 
+//服务端对iot pkg_observer_s请求的响应包
+typedef struct {
+    uint8_t target;
+    float temp;
+    float humi;
+    uint8_t resp_code;
+} pkg_observer_resp_s;
+
 typedef struct {//在不对齐的情况下是9个字节
     uint8_t target;
     float temp;
