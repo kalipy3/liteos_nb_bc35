@@ -6,15 +6,16 @@
  */
 
 #include "adxl345_test_task.h"
+#include "pkg.h"
 
 static void adxl345_reciver(void) {
 
-    printf("adxl345 init start..\r\n");
-    while(ADXL345_Init()){
-        printf("ADXL345 Error!\r\n");
-        LOS_TaskDelay(200);
-    }
-    printf("ADXL345 OK!\r\n");
+    //printf("adxl345 init start..\r\n");
+    //while(ADXL345_Init()){
+    //    printf("ADXL345 Error!\r\n");
+    //    LOS_TaskDelay(200);
+    //}
+    //printf("ADXL345 OK!\r\n");
 
     static char *buf[512];
     while (1)
@@ -31,8 +32,26 @@ static void adxl345_reciver(void) {
         //printf("y_angle:%d\r\n", adxl_data.yang);
         //printf("z_angle:%d\r\n", adxl_data.zang);
 
-        sprintf(buf, "adxl345_data:{x:%d,y:%d,z:%d,xang:%d,yang:%d,zang:%d}", adxl_data.x, adxl_data.x, adxl_data.x, adxl_data.xang, adxl_data.yang, adxl_data.zang);
-        printf("%s", buf);
+        sprintf(buf, "adxl345_data:{x:%d,y:%d,z:%d,xang:%f,yang:%f,zang:%f}", adxl_data.x, adxl_data.y, adxl_data.z, adxl_data.xang, adxl_data.yang, adxl_data.zang);
+        printf("%s\r\n", buf);
+
+        //测试方便，如果adxl的x>200，说明老人摔倒，iot给php_server发送adxl_alarm包
+        if (adxl_data.x > 200)
+        {
+            printf("your family fall down , adxl_alarm to server..\r\n");
+
+            //打包
+            pkg_s pkg = build_adxl_alarm_pkg();
+            printf("pkg_len:%d\r\n\r\n", pkg.pkg_len);
+            printf("pkg.pkg_buf:---\r\n");
+            for (int i = 0; i < pkg.pkg_len; i++)
+            {
+                printf("pkg.pkg_buf[%d]:%x ", i, pkg.pkg_buf[i]);
+            }
+            printf("---\r\n");
+            static char presp[1];
+            nb_nsosd_ex(presp, pkg.pkg_buf, pkg.pkg_len);
+        }
     }
 }
 
@@ -43,7 +62,7 @@ uint32_t create_adxl345_receiver_task(void)
     TSK_INIT_PARAM_S stInitParam1;
 
     stInitParam1.usTaskPrio = 9;
-    stInitParam1.uwStackSize = 0x400;
+    stInitParam1.uwStackSize = 0x800;
     stInitParam1.pcName = "adxl345_reciver";
 
     stInitParam1.pfnTaskEntry = adxl345_reciver;

@@ -39,4 +39,8 @@ pkg_s build_pkg_observer_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_p, fl
 void parse_pkg_observer_adxl_pkg(char *raw_pkg, pkg_head_s *h, pkg_observer_s *p);
 pkg_s build_pkg_observer_adxl_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_p, Adxl345_data *adxl_data, uint8_t resp_code);
 
+//adxl检测到老人摔倒后，iot给php发报警请求包，和iot对php响应包的解析
+pkg_s build_adxl_alarm_pkg();
+void parse_adxl_alarm_resp_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_resp_s *p);
+
 #endif /* !PKG_H */

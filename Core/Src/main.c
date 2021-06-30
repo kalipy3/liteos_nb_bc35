@@ -114,7 +114,7 @@ int main(void)
     //Create_bc35_UDP_Test_Task();
     //Create_BC35_Connectiontor_Task();
     Create_bc35_TCP_Test_Task();
-    //create_adxl345_receiver_task();
+    create_adxl345_receiver_task();
 
     LOS_Start();
   /* USER CODE END 2 */

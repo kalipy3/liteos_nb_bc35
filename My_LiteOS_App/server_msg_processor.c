@@ -101,6 +101,12 @@ void server_pkg_process(svr_dn_msg_parsed_s *parsed)
                 pkg_head_s th;
                 parse_bind_termid_to_uid_resp_pkg(parsed->data, &th, &tp);
 
+            } else if (TARGET_ADXL == target) {
+                printf("get a resp pkg from server..\r\n");
+                //解析服务器发来的响应包
+                pkg_act_resp_s tp;
+                pkg_head_s th;
+                parse_adxl_alarm_resp_pkg(parsed->data, &th, &tp);
             }
             
             //--------------------------------------------------------------- 

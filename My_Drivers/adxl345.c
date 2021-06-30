@@ -57,7 +57,7 @@ void ADXL345_Read_Average(short *x,short *y,short *z,uint8_t times){
     }
 }
 /*计算ADXL345角度，x/y/表示各方向上的加速度分量，dir表示要获得的角度*/
-short ADXL345_Get_Angle(float x,float y,float z,uint8_t dir){
+float ADXL345_Get_Angle(short x,short y,short z,uint8_t dir){
     float temp;
     float res=0;	//弧度值
     switch(dir){
@@ -132,14 +132,15 @@ void adxl345_data_get(Adxl345_data *adxl_data){
     short x,y,z;
     ADXL345_Read_Average(&x,&y,&z,10); 
 
-    short xang,yang,zang;	
+    float xang,yang,zang;	
     xang=ADXL345_Get_Angle(x,y,z,1);
     yang=ADXL345_Get_Angle(x,y,z,2);
     zang=ADXL345_Get_Angle(x,y,z,0);
 
-    adxl_data->y = y;
-    adxl_data->z = z;
-    adxl_data->xang = xang;
-    adxl_data->yang = yang;
-    adxl_data->zang = zang;
+    adxl_data->x = (uint16_t)x;
+    adxl_data->y = (uint16_t)y;
+    adxl_data->z = (uint16_t)z;
+    adxl_data->xang = (float)xang;
+    adxl_data->yang = (float)yang;
+    adxl_data->zang = (float)zang;
 }

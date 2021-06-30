@@ -64,7 +64,7 @@ void ADXL345_RD_XYZ(short *x,short *y,short *z);
 void ADXL345_Read_Average(short *x,short *y,short *z,uint8_t times);
 
 /*计算ADXL345角度，x/y/表示各方向上的加速度分量，dir表示要获得的角度*/
-short ADXL345_Get_Angle(float x,float y,float z,uint8_t dir);
+float ADXL345_Get_Angle(short x,short y,short z,uint8_t dir);
 
 /*ADXL345自动校准函数*/
 void ADXL345_AUTO_Adjust(char *xval,char *yval,char *zval);

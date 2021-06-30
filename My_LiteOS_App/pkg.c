@@ -264,3 +264,44 @@ pkg_s build_pkg_observer_adxl_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_
 
     return pkg;
 }
+
+//iot_adxl老人摔倒报警请求(请求发起方:iot,请求接收方:php_server)
+pkg_s build_adxl_alarm_pkg()
+{
+    uint16_t len;
+    pkg_act_s *p;
+    pkg_head_s *h;
+
+    p = (pkg_act_s *)(pkg_buf + sizeof(pkg_head_s));
+    p->target = TARGET_ADXL;
+    p->act = ACT_ADXL_ALARM;
+    len = sizeof(pkg_head_s) + sizeof(pkg_act_s) + 2;
+    build_head(len, PKG_ACTION, 0);
+    build_tail(len);
+    h = (pkg_head_s *)pkg_buf;
+    h->check_sum = get_check_sum(len);
+
+    pkg_s pkg;
+    pkg.pkg_buf = pkg_buf;
+    pkg.pkg_len = len;
+
+    return pkg;
+}
+
+//iot_adxl老人摔倒报警请求的响应(php_server对iot_adxl_alarm请求的响应)
+void parse_adxl_alarm_resp_pkg(char *raw_pkg, pkg_head_s *h, pkg_act_resp_s *p)
+{
+    memcpy((void *)h, (void *)raw_pkg, sizeof(pkg_head_s));
+    printf("--adxl_alarm_resp resp_pkg_head_s--\r\n");
+    printf("h.id:%d\r\n",h->id);
+    printf("h.check_sum:%d\r\n",h->check_sum);
+    printf("h.tag:%s\r\n",h->tag);
+    printf("h.len:%d\r\n",h->len);
+    printf("h.seq:%d\r\n",h->seq);
+    printf("h.type:%d\r\n\r\n",h->type);
+
+    memcpy((void *)p, (void *)(raw_pkg+sizeof(pkg_head_s)), sizeof(pkg_act_resp_s));
+    printf("--adxl_alarm_resp resp_pkg_act_resp_s--\r\n");
+    printf("p.target:%d\r\n",p->target);
+    printf("p.resp_code:%d\r\n\r\n",p->resp_code);
+}
