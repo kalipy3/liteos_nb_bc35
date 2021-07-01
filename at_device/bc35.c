@@ -17,6 +17,11 @@ extern uint32_t send_cmd_ex(at_cmd_args_s *args);
 char receive_buf[256];
 void at_device_svr_dn_msg_parse(char *buf, svr_dn_msg_parsed_s *p)
 {
+    //接收数据
+    if (strstr(buf, "+NSONMI:")) {
+        at_usart_bc35_send("AT+NSORF=1,256\r", strlen("AT+NSORF=1,256\r"));//tcp or udp recive data
+    } 
+
     //if (strstr(buf, "9020")) {
     //if (strstr(buf, "9000")) {
     if (strstr(buf, "8282")) {
