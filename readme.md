@@ -81,7 +81,7 @@ bc35g是一款多频段、高性能、低功耗的NB-IoT无线通信模块
 
 ##### 工作原理
 
-![Image](./img/image_2021-07-01-09-47-30.png)
+![Image](./img/image_2021-07-01-21-33-09.png)
 
 说明: 对内来说，bc35和stm32是通过串口来通信的; 对外来是，bc35是和基站进行通信的，基站管理bc35并转发bc35的消息
 
@@ -183,7 +183,7 @@ vue前端websocket页面:
 
 流程图:
 
-
+![Image](./img/liucen2.png)
 
 ##### nb_iot请求php_tcp_server对老人摔倒进行报警
 
@@ -197,16 +197,54 @@ vue前端websocket页面:
 
 ##### 浏览器ws请求操作(打开或关闭)nb_iot的led灯
 
-流程图:
+流程图: 略，请看下面adxl加速度的
 
 ##### 浏览器ws请求获取nb_iot的温湿度
 
-流程图:
+流程图: 略，请看下面adxl加速度的
 
 ##### 浏览器ws请求获取nb_iot上adxl加速度传感器x,y,z轴数据并实时在前端显示
 
 流程图:
 
+![Image](./img/liucen3.png)
+
+### 现场展示
+
+#### 开发版上电入网和连上php服务器后给php_tcp服务器发送绑定term_id到php_tcp_client的请求和响应
+
+1. iot上电入网
+
+    ![Image](./img/gif1)
+
+2. iot构造绑定请求包，并发送
+
+    ![Image](./img/gif2)
+
+3. php_tcp_server accept到一个tcp连接,并且收到iot的绑定请求,然后解包
+
+    ![Image](./img/gif5)
+
+4. php_tcp_server构造该绑定请求的响应包，然后响应回该iot
+
+    ![Image](./img/gif6)
+
+5. iot发送成功后，收到php_tcp对该请求的响应数据包
+
+    ![Image](./img/gif3)
+
+6. iot对其进行解包
+
+    ![Image](./img/gif4)
+
+7. 我们重点看php_tcp_server响应过来的resp_code,为0,表示成功处理该iot的绑定请求
+
+#### gif动态图或mp4或现场演示
+
 ### 总结
 
- 
+通过这次10多天的实训，学到了非常多的干货，尤其对嵌入式通信协议的定制，通信数据包的打包，以及liteos进程的互斥，同步以及进程之间的通信(通过消息队列)，有了更深刻的理解。 
+
+当然，由于时间过于匆忙，无论是nb_iot侧，还是服务器端，都还有很多可以优化，改进的地方。
+
+最后，感谢同学们和老师的帮助,有机会下次再见，再一起学习，玩！！
