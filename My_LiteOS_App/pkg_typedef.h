@@ -11,7 +11,7 @@
 #include "stdint.h"
 #pragma pack (1)
 
-//包首//在不对齐的情况下是12个字节
+//包首//在不对齐的情况下是3+2+1+4+1+2=13个字节
 typedef struct {
     char tag[3];//标识符
     uint16_t len;

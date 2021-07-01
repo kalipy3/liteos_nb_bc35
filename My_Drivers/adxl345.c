@@ -137,9 +137,9 @@ void adxl345_data_get(Adxl345_data *adxl_data){
     yang=ADXL345_Get_Angle(x,y,z,2);
     zang=ADXL345_Get_Angle(x,y,z,0);
 
-    adxl_data->x = (uint16_t)x;
-    adxl_data->y = (uint16_t)y;
-    adxl_data->z = (uint16_t)z;
+    adxl_data->x = (int16_t)x;
+    adxl_data->y = (int16_t)y;
+    adxl_data->z = (int16_t)z;
     adxl_data->xang = (float)xang;
     adxl_data->yang = (float)yang;
     adxl_data->zang = (float)zang;

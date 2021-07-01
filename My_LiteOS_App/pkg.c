@@ -246,8 +246,10 @@ pkg_s build_pkg_observer_adxl_resp_pkg(pkg_head_s *args_h, pkg_observer_s *args_
     p = (pkg_observer_adxl_resp_s *)(pkg_buf + sizeof(pkg_head_s));
     p->target = args_p->target;
     p->x = adxl_data->x;
-    p->y = adxl_data->y;
-    p->z = adxl_data->z;
+    //p->y = adxl_data->y;
+    //p->z = adxl_data->z;
+    p->y = 35;
+    p->z = 258;
     p->xang = adxl_data->xang;
     p->yang = adxl_data->yang;
     p->zang = adxl_data->zang;
